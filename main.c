@@ -26,8 +26,7 @@
  *  @file main.c
  *
  *  @brief main loop and calling any hardware init stuff. timing hacks for EEPROM
- *  writes not to block usb interrupts. logic to handle 2 second timeout then
- *  jump to user code.
+ *  writes not to block usb interrupts.
  *
  */
 
@@ -43,12 +42,14 @@ int main() {
 
     strobePin(LED_BANK, LED, STARTUP_BLINKS, BLINK_FAST);
 
-    /* wait for host to upload program or halt bootloader */
-    bool no_user_jump = !checkUserCode(USER_CODE_FLASH) && !checkUserCode(USER_CODE_RAM) || readPin(BUTTON_BANK, BUTTON);
-    int delay_count = 0;
+    /* jump to user application or start bootloader */
+    bool no_user_jump = !checkUserCode(USER_CODE_FLASH) && !checkUserCode(USER_CODE_RAM) || readPin(BUTTON_BANK, BUTTON) || checkResetMagic();
 
-    while ((delay_count++ < BOOTLOADER_WAIT)
-            || no_user_jump) {
+    /* clear the magic so we don't reenter the bootloader in subsequent
+       resets after the application has started */
+    clearResetMagic();
+
+    while (no_user_jump) {
 
         strobePin(LED_BANK, LED, 1, BLINK_SLOW);
 

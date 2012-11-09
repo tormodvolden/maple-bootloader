@@ -154,6 +154,18 @@ bool checkUserCode(u32 usrAddr) {
     }
 }
 
+bool checkResetMagic(void) {
+    if (*(vu32 *) MAGIC_RESET_ADDRESS == (u32) MAGIC_RESET_VALUE) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
+void clearResetMagic(void) {
+        *((vu32 *) MAGIC_RESET_ADDRESS) = 0;
+}
+
 void jumpToUser(u32 usrAddr) {
     typedef void (*funcPtr)(void);
 

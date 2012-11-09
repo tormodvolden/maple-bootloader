@@ -102,6 +102,14 @@
 #define __PSC(__TIMCLK, __PERIOD)  (((__VAL(__TIMCLK, __PERIOD)+49999UL)/50000UL) - 1)
 #define __ARR(__TIMCLK, __PERIOD) ((__VAL(__TIMCLK, __PERIOD)/(__PSC(__TIMCLK, __PERIOD)+1)) - 1)
 
+/* Used to detect if the run-time CDC library has initiated the reset
+   on request from the IDE so that we should start the USB bootloader.
+   They must be the same in libmaple/include/libmaple/usb_cdcacm.h.
+   The magic must not be overwritten by the bootloader startup code
+   so keep it safely below the stack top (_estack in linker file) */
+#define MAGIC_RESET_ADDRESS 0x20004E00
+#define MAGIC_RESET_VALUE 0xFAB1FAB1
+
 #define SET_REG(addr,val) do { *(vu32*)(addr)=val; } while(0)
 #define GET_REG(addr)     (*(vu32*)(addr))
 
@@ -176,6 +184,8 @@ void setupLED(void);
 void setupFLASH(void);
 void setupBUTTON(void);
 bool checkUserCode(u32 usrAddr);
+bool checkResetMagic(void);
+void clearResetMagic(void);
 void jumpToUser(u32 usrAddr);
 
 bool flashWriteWord(u32 addr, u32 word);
