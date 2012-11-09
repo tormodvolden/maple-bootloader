@@ -36,7 +36,6 @@ int main() {
     systemReset(); // peripherals but not PC
     setupCLK();
     setupLED();
-    setupUSB();
     setupBUTTON();
     setupFLASH();
 
@@ -49,6 +48,9 @@ int main() {
        resets after the application has started */
     clearResetMagic();
 
+    if (no_user_jump) {
+        setupUSB();
+    }
     while (no_user_jump) {
 
         strobePin(LED_BANK, LED, 1, BLINK_SLOW);
