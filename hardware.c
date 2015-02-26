@@ -168,7 +168,7 @@ bool checkUserCode(u32 usrAddr) {
 void jumpToUser(u32 usrAddr) {
     typedef void (*funcPtr)(void);
 
-    u32 jumpAddr = *(vu32 *)(usrAddr + 0x04); /* reset ptr in vector table */
+    vu32 jumpAddr = *(vu32 *)(usrAddr + 0x04); /* reset ptr in vector table */
     funcPtr usrMain = (funcPtr) jumpAddr;
 
     /* tear down all the dfu related setup */

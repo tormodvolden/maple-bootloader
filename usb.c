@@ -267,8 +267,8 @@ void usbReset(void) {
     _SetEPType(ENDP0, EP_CONTROL);
     _SetEPTxStatus(ENDP0, EP_TX_STALL);
 
-    _SetEPRxAddr(ENDP0, ENDP0_RXADDR);
-    _SetEPTxAddr(ENDP0, ENDP0_TXADDR);
+    SetEPRxAddr(ENDP0, ENDP0_RXADDR);
+    SetEPTxAddr(ENDP0, ENDP0_TXADDR);
 
     Clear_Status_Out(ENDP0);
 
